@@ -18,7 +18,7 @@ def downloadImages(requestURL, directory):
 	if not(os.path.isdir(directory)):
 		os.makedirs(os.path.join(directory))
 	
-	btime = datetime.datetime.now()
+	# btime = datetime.datetime.now()
 
 	res=requests.get(requestURL)
 	html=res.text 
@@ -32,6 +32,5 @@ def downloadImages(requestURL, directory):
 			newFileName = str(i) +"." + imageType
 			urllib.request.urlretrieve(imageURL, os.path.join(directory,newFileName))
 
-	atime = datetime.datetime.now()
-
-	print('total time: ' + btime - atime)
+	# atime = datetime.datetime.now()
+	# print('total time: ' + btime - atime)

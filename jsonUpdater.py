@@ -61,7 +61,6 @@ def saveJSON():
 					'href' : 'https://comic.naver.com'+href
                         	} 
 				data['webtoons'].append(webtoon) 
-				break
 
 	with open(file_path, 'w', encoding='UTF-8-sig') as outfile:
 		json.dump(data, outfile, indent=4, ensure_ascii=False)
