@@ -1,8 +1,39 @@
 from imagesDownloader import *
+from jsonUpdater import *
 import constant # Webtoon week view, size of each picture: 83
 import re
+import json
+import datetime
+
+def getLastEpisode(requestURL, titleId):
+	p = re.compile("nclk_v2\(event,'lst.title','" +titleId +"','(\d+)'\)");
+	res=requests.get(requestURL)
+	html=res.text
+	soup=BeautifulSoup(html,'html.parser')
+	selectedTag=soup.select("a")
+	for i, tag in enumerate(selectedTag):
+
+		k = tag.get('onclick')
+
+		if k:
+			if 'lst.title' in k:
+				m = p.match(k)
+				if m:
+					return m.group(1)
+
 
 pattern = re.compile('.+titleId=(\d+)&weekday=(.+)')
+
+file_path = "./sample.json"
+
+data = {}
+
+now = datetime.datetime.now()
+nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
+
+data['update time'] = nowDatetime
+
+data['webtoons'] = []
 
 
 requestURL = "https://comic.naver.com/webtoon/weekday.nhn"
@@ -25,16 +56,20 @@ for tag in selectedTag:
 			title = str(tag.get('title'))
 			titleId = m.group(1)
 			weekday = m.group(2)
+			lastEpisode = getLastEpisode('https://comic.naver.com'+href, titleId);
 
 			# json format
 			webtoon = {
 				'title' : title,
 				'id' : titleId,
-				'weekday' : weekday
+				'weekday' : weekday,
+				'lastEpisode' : lastEpisode,
+				'href' : 'https://comic.naver.com'+href
 			}
+			data['webtoons'].append(webtoon);
 
-			print(webtoon)
-
+with open(file_path, 'w', encoding='UTF-8-sig') as outfile:
+    json.dump(data, outfile, indent=4, ensure_ascii=False)
 
 
 
