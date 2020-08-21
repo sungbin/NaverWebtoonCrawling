@@ -1,29 +1,20 @@
 from imagesDownloader import *
 from jsonUpdater import *
+from jsonParser import *
 
-import json
-import time
+# setting
+urllib_config()
 
 # data.json
 """
 saveJSON();
 """
 
-with open('./data.json', 'r', encoding='UTF-8-sig') as json_file:
-	json_data = json.load(json_file)
-
-	update_time = datetime.datetime.strptime(json_data['update time'], '%Y-%m-%d %H:%M:%S')
-	webtoons = json_data['webtoons']
-
-	for webtoon in webtoons:
-		urllib_config()
-		requestURL = get_requestURL(webtoon['id'], 39, webtoon['weekday'])
-		downloadImages(requestURL, "./test")
-		break
+# parse JSON, and crawling last episode
+parseJSON();
 
 # images download
 """
-urllib_config()
 requestURL = get_requestURL(732224, 39, 'sun')
 downloadImages(requestURL, "./test")
 """
